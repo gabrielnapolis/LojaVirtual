@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Lista de Pessoas</title>
+</h:head>
+<h:body>
+	<h:form id="form">
+	
+		<p:growl id="growl" showDetail="true"/>
+		
+		<div align="right">
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/exel.png" width="24" />
+				<p:dataExporter type="xls" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/pdf.png" width="24" />
+				<p:dataExporter type="pdf" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/csv.png" width="24" />
+				<p:dataExporter type="csv" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/xml.png" width="24" />
+				<p:dataExporter type="xml" target="tbl" fileName="f" />
+			</h:commandLink>
+		</div>
+
+		<p:dataTable id="tbl" var="objPessoa" value="#{viewPessoa.listagem}"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+			{PageLinks} {NextPageLink} {LastPageLink}"
+			paginator="true" rows="10" style="margin-bottom:20px">
+
+			<f:facet name="header">
+				<h:outputLabel value="Lista de Clientes" />
+				<p:commandButton value="Inserir" icon="icon-novo"
+					actionListener="#{viewPessoa.actionInserir}"
+					oncomplete="PF('cadDialog').show()" 
+					update=":form:cadDetail">
+				</p:commandButton>
+			</f:facet>
+
+			<p:column headerText="Código" sortyBy="objPessoa.id">
+				<h:outputText value="#{objPessoa.id}" />
+			</p:column>
+
+			<p:column headerText="Nome" sortBy="objPessoa.nome">
+				<h:outputText value="#{objPessoa.nome}" />
+			</p:column>
+
+			<p:column headerText="CPF" sortBy="objPessoa.cpf">
+				<h:outputText value="#{objPessoa.cpf}" />
+			</p:column>
+
+
+			<p:column style="width:32px;text-align:center">
+				<p:commandButton update=":form:cadDetail"
+					oncomplete="PF('cadDialog').show()" icon="ui-icon-search"
+					title="View">
+					<f:setPropertyActionListener value="#{objPessoa}"
+						target="#{viewPessoa.pessoa}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		
+		<p:dialog header="Cadastro de Pessoa" widgetVar="cadDialog"
+			modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+			<p:outputPanel id="cadDetail" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left">
+
+					<h:outputLabel value="Código" />
+					<p:inputText value="#{viewPessoa.pessoa.id}" size="6"
+						maxlength="10" readonly="true" />
+
+					<h:outputLabel value="Nome" />
+					<p:inputText value="#{viewPessoa.pessoa.nome}" size="30"
+						maxlength="20" />
+
+					<h:outputLabel value="CPF" />
+					<p:inputMask value="#{viewPessoa.pessoa.cpf}" mask="999.999.999-99" />
+
+					<h:outputLabel value="RG" />
+					<p:inputMask value="#{viewPessoa.pessoa.rg}" mask="9999999" />
+					
+					<h:outputLabel value="Data de Nascimento"/>	
+					<p:calendar value="#{viewPessoa.pessoa.data}" pattern="dd-MM-yyyy" mask="true"/>
+					
+
+					<h:outputLabel value="Rua" />
+					<p:inputText value="#{viewPessoa.pessoa.rua}" size="6"
+						maxlength="15" />
+
+					<h:outputLabel value="Bairro" />
+					<p:inputText value="#{viewPessoa.pessoa.bairro}" size="6"
+						maxlength="15" />
+
+					<h:outputLabel value="Cidade" />
+					<p:inputText value="#{viewPessoa.pessoa.cidade}" size="6"
+						maxlength="15" />
+
+					<h:outputLabel value="UF" />
+					<p:selectOneMenu value="#{viewPessoa.pessoa.uf}" size="6"
+						maxlength="3">
+						<f:selectItem itemLabel="GO" itemValue="GO" />
+						<f:selectItem itemLabel="MT" itemValue="MT" />
+						<f:selectItem itemLabel="MG" itemValue="MG" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="CEP" />
+					<p:inputText value="#{viewPessoa.pessoa.cidade}" size="6"
+						maxlength="15" />
+
+					<h:outputLabel value="Email" />
+					<p:inputText value="#{viewPessoa.pessoa.email}" size="6" />
+
+					<h:outputLabel value="Senha" />
+					<p:inputText value="#{viewPessoa.pessoa.senha}" size="6" />
+
+					<h:outputLabel value="Tipo" />
+					<p:selectOneMenu value="#{viewPessoa.pessoa.tipo}" size="6" >
+						<f:selectItem itemLabel="Cliente" itemValue="ROLE_CLIENTE"/>
+						<f:selectItem itemLabel="Administrador" itemValue="ROLE_ADMINISTRADOR"/>
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+				
+				<p:commandButton value="Excluir" action="#{viewPessoa.actionExcluir}" update="growl"/>
+				<p:commandButton value="Gravar"  action="#{viewPessoa.actionGravar}"  update="growl" />
+				<p:commandButton value="Cancelar" oncomplete="cadDialog.hide()" />
+
+			</p:outputPanel>
+		</p:dialog>
+		
+	</h:form>
+</h:body>
+</html>

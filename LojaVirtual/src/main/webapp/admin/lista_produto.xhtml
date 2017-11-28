@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Lista de Formas de Produtos</title>
+</h:head>
+
+<h:body>
+	<h:form id="form">
+
+		<p:growl id="msgs" showDetail="true" />
+
+		<div align="right">
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/exel.png" width="24" />
+				<p:dataExporter type="xls" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/pdf.png" width="24" />
+				<p:dataExporter type="pdf" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/csv.png" width="24" />
+				<p:dataExporter type="csv" target="tbl" fileName="f" />
+			</h:commandLink>
+
+			<h:commandLink>
+				<p:graphicImage value="/publico/imagens/xml.png" width="24" />
+				<p:dataExporter type="xml" target="tbl" fileName="f" />
+			</h:commandLink>
+		</div>
+
+		<p:dataTable id="tbl" var="pdt" value="#{viewProduto.listagem}"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+			{PageLinks} {NextPageLink} {LastPageLink}"
+			paginator="true" rows="10" style="margin-bottom:20px">
+
+			<f:facet name="header">
+				<h:outputLabel value="Lista de Formas de Produtos" />
+				<p:commandButton value="Inserir" icon="icon-novo"
+					actionListener="#{viewProduto.actionInserir}"
+					oncomplete="PF('cadDialog').show()" 
+					update=":form:cadDetail">
+				</p:commandButton>
+			</f:facet>
+
+			<p:column headerText="Código" sortyBy="pdt.id">
+				<h:outputText value="#{pdt.id}" />
+			</p:column>
+
+			<p:column headerText="Nome" sortBy="pdt.nome">
+				<h:outputText value="#{pdt.nome}" />
+			</p:column>
+
+			<p:column headerText="Preço" sortBy="pdt.preco">
+				<h:outputText value="#{pdt.preco}" />
+			</p:column>
+
+			<p:column style="width:32px;text-align:center">
+				<p:commandButton update=":form:cadDetail" oncomplete="PF('cadDialog').show()" 
+					icon="ui-icon-search" title="View">
+					<f:setPropertyActionListener value="#{pdt}"
+						target="#{viewProduto.produto}" />
+				</p:commandButton>
+			</p:column>			
+		</p:dataTable>
+
+		<p:dialog header="Cadastro de Produtos"
+			widgetVar="cadDialog" modal="true" showEffect="fade"
+			hideEffect="fade" resizable="false">
+			
+			<p:outputPanel id="cadDetail" style="text-align:center;">
+				<h:panelGrid columns="2" style="text-align:left">
+				
+					<h:outputLabel value="Código" />
+					<p:inputText value="#{viewProduto.produto.id}" size="6"
+						maxlength="10" readonly="true" />
+					<h:outputLabel value="Nome" />
+					<p:inputText value="#{viewProduto.produto.nome}" size="20"
+						maxlength="20" />
+					<h:outputLabel value="Preço" />
+					<p:inputText value="#{viewProduto.produto.preco}" size="20"
+						maxlength="3" />
+				</h:panelGrid>
+				
+				<h:commandButton value="Excluir"
+					action="#{viewProduto.actionExcluir}" update="growl" />
+				<h:commandButton value="Gravar"
+					action="#{viewProduto.actionGravar}" update="growl" />
+				<h:commandButton value="Cancelar" oncomplete="cadDialog.hide()" />
+			
+			</p:outputPanel>
+		</p:dialog>	
+		
+	</h:form>
+</h:body>	
+</html>

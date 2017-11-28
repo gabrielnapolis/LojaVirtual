@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//HIBERNATE/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- Configuração da conexão com o banco -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="connection.datasource">java:/comp/env/jdbc/BDLojaVirtual</property>
+
+		<!-- Usando as configurações do C3PO para pool de conexões -->
+		<property name="c3po.min_size">5</property>
+		<property name="c3po.max_size">20</property>
+		<property name="c3po.timeout">300</property>
+		<property name="c3po.max_statements">50</property>
+		<property name="c3po.idle_test_period">3000</property>
+
+		<!-- Configurações de debug -->
+		<property name="show_sql">false</property>
+		<property name="format_sql">false</property>
+		<property name="generate_statistics">false</property>
+		<property name="use_sql_coments">false</property>
+
+		<!-- Mapeamento das Classes -->
+		<mapping class="beans.Produto" />
+		<mapping class="beans.Pessoa" />
+		<mapping class="beans.Fone" />
+		<mapping class="beans.FormaPgto" />
+
+	</session-factory>
+</hibernate-configuration>
